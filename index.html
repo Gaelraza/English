@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mianatra Anglisy - Apprendre l'Anglais</title>
+    <link rel="stylesheet" href="design-tokens.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="app-container" id="app-container">
+        <main class="main-content">
+            <header class="header">
+                <h1 class="header-title" data-i18n="app_title">Mianatra Anglisy</h1>
+                <div class="lang-toggle" role="group" aria-label="Language selection">
+                    <button class="lang-toggle-btn is-active" data-lang="mg" aria-pressed="true">MG</button>
+                    <button class="lang-toggle-btn" data-lang="fr" aria-pressed="false">FR</button>
+                </div>
+            </header>
+
+            <section id="home-section" class="page-section is-active">
+                <h2 class="visually-hidden" data-i18n="levels_title">Fitsipika Grammaire</h2>
+                
+                <div class="level-grid">
+                    <div class="level-card" tabindex="0" data-level="debutant" role="button" aria-label="Level Debutant">
+                        <div class="level-card-icon">🌱</div>
+                        <h3 class="level-card-title" data-i18n="level_debutant">Débutant</h3>
+                        <p class="level-card-description" data-i18n="level_debutant_desc">Present simple, SVO order, articles, pronouns</p>
+                    </div>
+
+                    <div class="level-card" tabindex="0" data-level="intermediaire" role="button" aria-label="Level Intermédiaire">
+                        <div class="level-card-icon">🌿</div>
+                        <h3 class="level-card-title" data-i18n="level_intermediaire">Intermédiaire</h3>
+                        <p class="level-card-description" data-i18n="level_intermediaire_desc">Present continuous, past simple, question formation, negation</p>
+                    </div>
+
+                    <div class="level-card" tabindex="0" data-level="avance" role="button" aria-label="Level Avancé">
+                        <div class="level-card-icon">🌳</div>
+                        <h3 class="level-card-title" data-i18n="level_avance">Avancé</h3>
+                        <p class="level-card-description" data-i18n="level_avance_desc">Future forms, modals, conjunctions, compound sentences</p>
+                    </div>
+
+                    <div class="level-card" tabindex="0" data-level="expert" role="button" aria-label="Level Expert">
+                        <div class="level-card-icon">🌲</div>
+                        <h3 class="level-card-title" data-i18n="level_expert">Expert</h3>
+                        <p class="level-card-description" data-i18n="level_expert_desc">Perfect tenses, passive voice, conditionals, reported speech</p>
+                    </div>
+                </div>
+
+                <div class="redaction-entry">
+                    <div class="redaction-entry-card" tabindex="0" data-action="redaction" role="button" aria-label="Redaction Tool">
+                        <h3 class="redaction-entry-title" data-i18n="redaction_title">Outil de Rédaction</h3>
+                        <p class="redaction-entry-description" data-i18n="redaction_desc">Write and check your English text</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="vocab-section" class="page-section">
+                <button class="btn btn-secondary nav-back-btn" data-action="back-home">
+                    ← <span data-i18n="back_home">Miverina any an-trano</span>
+                </button>
+                
+                <div class="session-info">
+                    <div>
+                        <span class="session-level-name" id="vocab-level-name"></span>
+                        <span class="session-exercise-type" data-i18n="exercise_vocab">Vocabulary</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" id="vocab-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="emoji-display" id="vocab-emoji"></div>
+                    <div class="scrambled-letter-container" id="scrambled-container"></div>
+                    <div class="answer-input-container">
+                        <input type="text" class="answer-input" id="vocab-answer" autocomplete="off" spellcheck="false">
+                        <button class="btn btn-primary" id="vocab-submit" data-i18n="btn_check">Check</button>
+                    </div>
+                    <div id="vocab-feedback" class="feedback-display hidden"></div>
+                    <button class="btn btn-success hidden" id="vocab-next" data-i18n="btn_next">Next</button>
+                </div>
+            </section>
+
+            <section id="grammar-section" class="page-section">
+                <button class="btn btn-secondary nav-back-btn" data-action="back-home">
+                    ← <span data-i18n="back_home">Miverina any an-trano</span>
+                </button>
+                
+                <div class="session-info">
+                    <div>
+                        <span class="session-level-name" id="grammar-level-name"></span>
+                        <span class="session-exercise-type" data-i18n="exercise_grammar">Grammar</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" id="grammar-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="grammar-rule-box" id="grammar-rule-container">
+                    <h3 class="grammar-rule-title" id="grammar-rule-title"></h3>
+                    <p class="grammar-rule-content" id="grammar-rule-content"></p>
+                </div>
+
+                <div class="card">
+                    <p class="grammar-instruction" data-i18n="grammar_instruction">Arrange the words to form a correct sentence:</p>
+                    <div class="word-block-container" id="sentence-container"></div>
+                    <div class="word-bank" id="word-bank"></div>
+                    <div id="grammar-feedback" class="feedback-display hidden"></div>
+                    <button class="btn btn-primary" id="grammar-check" data-i18n="btn_check">Check</button>
+                    <button class="btn btn-success hidden" id="grammar-next" data-i18n="btn_next">Next</button>
+                </div>
+            </section>
+
+            <section id="redaction-section" class="page-section">
+                <button class="btn btn-secondary nav-back-btn" data-action="back-home">
+                    ← <span data-i18n="back_home">Miverina any an-trano</span>
+                </button>
+
+                <h2 class="header-title" data-i18n="redaction_tool_title">Redaction Tool</h2>
+                
+                <div class="grammar-rule-box">
+                    <p data-i18n="redaction_description">Cet outil vérifie uniquement les règles de base — accord sujet-verbe, ordre des mots, temps, articles. / This tool checks basic rules only — subject-verb agreement, word order, tense, articles.</p>
+                </div>
+
+                <textarea class="textarea" id="redaction-textarea" placeholder="Write your story or summary in English here..."></textarea>
+                
+                <div style="margin-top: var(--spacing-lg);">
+                    <button class="btn btn-primary" id="redaction-check" data-i18n="btn_analyze">Analyze</button>
+                    <button class="btn btn-secondary" id="redaction-clear" data-i18n="btn_clear">Clear</button>
+                </div>
+
+                <div id="redaction-feedback" class="feedback-display hidden"></div>
+            </section>
+        </main>
+
+        <aside class="banner-container" id="banner-container" aria-live="polite">
+            <h3 class="banner-title" data-i18n="banner_title">Fanampiana</h3>
+            <div class="banner-content" id="banner-content">
+                <p data-i18n="banner_welcome">Welcome! Select a level to start learning English.</p>
+            </div>
+        </aside>
+    </div>
+
+    <div class="pop-up-overlay" id="pop-up-overlay">
+        <div class="pop-up" role="dialog" aria-modal="true" aria-labelledby="pop-up-title">
+            <div class="pop-up-header">
+                <h3 class="pop-up-title" id="pop-up-title"></h3>
+                <button class="pop-up-close" data-action="close-popup" aria-label="Close">&times;</button>
+            </div>
+            <div class="pop-up-body" id="pop-up-body"></div>
+            <div class="pop-up-footer">
+                <button class="btn btn-primary" data-action="close-popup" data-i18n="btn_close">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="score-display" id="score-display">
+        <span class="score-label" data-i18n="score_label">Score:</span>
+        <span class="score-value" id="score-value">0</span>
+    </div>
+
+    <script src="data/vocab-data.js"></script>
+    <script src="data/grammar-data.js"></script>
+    <script src="js/vocab-engine.js"></script>
+    <script src="js/grammar-engine.js"></script>
+    <script src="js/redaction-engine.js"></script>
+    <script src="js/ui-controller.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
+    </script>
+</body>
+</html>
