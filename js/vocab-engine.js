@@ -4,23 +4,45 @@ const vocabEngine = {
     score: 0,
     shuffledLetters: [],
     usedTiles: [],
+    shuffledOrder: [],
+
+    shuffleArray: function(array) {
+        var newArray = array.slice();
+        for (var i = newArray.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = newArray[i];
+            newArray[i] = newArray[j];
+            newArray[j] = temp;
+        }
+        return newArray;
+    },
+
+    scrambleWord: function(word) {
+        var letters = word.split('');
+        var scrambled = this.shuffleArray(letters);
+        while (scrambled.join('') === word && letters.length > 1) {
+            scrambled = this.shuffleArray(letters);
+        }
+        return scrambled;
+    },
 
     init: function(level) {
         this.currentLevel = level;
         this.currentIndex = 0;
         this.score = 0;
+        this.shuffledOrder = this.shuffleArray(vocabData[this.currentLevel].slice());
         this.loadExercise();
         this.updateScoreDisplay();
     },
 
     loadExercise: function() {
-        const data = vocabData[this.currentLevel][this.currentIndex];
-        const emojiEl = document.getElementById('vocab-emoji');
-        const containerEl = document.getElementById('scrambled-container');
-        const answerInput = document.getElementById('vocab-answer');
-        const feedbackEl = document.getElementById('vocab-feedback');
-        const nextBtn = document.getElementById('vocab-next');
-        const submitBtn = document.getElementById('vocab-submit');
+        var data = this.shuffledOrder[this.currentIndex];
+        var emojiEl = document.getElementById('vocab-emoji');
+        var containerEl = document.getElementById('scrambled-container');
+        var answerInput = document.getElementById('vocab-answer');
+        var feedbackEl = document.getElementById('vocab-feedback');
+        var nextBtn = document.getElementById('vocab-next');
+        var submitBtn = document.getElementById('vocab-submit');
 
         emojiEl.textContent = data.emoji;
         answerInput.value = '';
@@ -28,17 +50,18 @@ const vocabEngine = {
         nextBtn.classList.add('hidden');
         submitBtn.disabled = false;
 
-        this.shuffledLetters = data.scrambled.split('');
+        this.shuffledLetters = this.scrambleWord(data.word);
         this.usedTiles = new Array(this.shuffledLetters.length).fill(false);
 
         containerEl.innerHTML = '';
+        var self = this;
         this.shuffledLetters.forEach(function(letter, index) {
-            const tile = document.createElement('div');
+            var tile = document.createElement('div');
             tile.className = 'scrambled-letter-tile';
             tile.textContent = letter;
             tile.dataset.index = index;
             tile.addEventListener('click', function() {
-                vocabEngine.handleTileClick(index);
+                self.handleTileClick(index);
             });
             containerEl.appendChild(tile);
         });
@@ -51,25 +74,25 @@ const vocabEngine = {
             return;
         }
 
-        const answerInput = document.getElementById('vocab-answer');
-        const letter = this.shuffledLetters[index];
+        var answerInput = document.getElementById('vocab-answer');
+        var letter = this.shuffledLetters[index];
         
         answerInput.value += letter;
         this.usedTiles[index] = true;
 
-        const tiles = document.querySelectorAll('.scrambled-letter-tile');
+        var tiles = document.querySelectorAll('.scrambled-letter-tile');
         tiles[index].classList.add('used');
     },
 
     checkAnswer: function() {
-        const data = vocabData[this.currentLevel][this.currentIndex];
-        const answerInput = document.getElementById('vocab-answer');
-        const feedbackEl = document.getElementById('vocab-feedback');
-        const nextBtn = document.getElementById('vocab-next');
-        const submitBtn = document.getElementById('vocab-submit');
+        var data = this.shuffledOrder[this.currentIndex];
+        var answerInput = document.getElementById('vocab-answer');
+        var feedbackEl = document.getElementById('vocab-feedback');
+        var nextBtn = document.getElementById('vocab-next');
+        var submitBtn = document.getElementById('vocab-submit');
 
-        const userAnswer = answerInput.value.toLowerCase().trim();
-        const correctAnswer = data.word.toLowerCase();
+        var userAnswer = answerInput.value.toLowerCase().trim();
+        var correctAnswer = data.word.toLowerCase();
 
         if (userAnswer === correctAnswer) {
             this.score += 10;
@@ -82,7 +105,8 @@ const vocabEngine = {
             feedbackEl.className = 'feedback-display feedback-incorrect';
             answerInput.value = '';
             this.usedTiles.fill(false);
-            const tiles = document.querySelectorAll('.scrambled-letter-tile');
+            var tiles = document.querySelectorAll('.scrambled-letter-tile');
+            var self = this;
             tiles.forEach(function(tile) {
                 tile.classList.remove('used');
             });
@@ -94,21 +118,22 @@ const vocabEngine = {
 
     nextExercise: function() {
         this.currentIndex++;
-        if (this.currentIndex >= vocabData[this.currentLevel].length) {
+        if (this.currentIndex >= this.shuffledOrder.length) {
+            this.shuffledOrder = this.shuffleArray(vocabData[this.currentLevel].slice());
             this.currentIndex = 0;
         }
         this.loadExercise();
     },
 
     updateScoreDisplay: function() {
-        const scoreEl = document.getElementById('score-value');
+        var scoreEl = document.getElementById('score-value');
         scoreEl.textContent = this.score;
     },
 
     updateProgress: function() {
-        const progressBar = document.getElementById('vocab-progress');
-        const total = vocabData[this.currentLevel].length;
-        const percent = ((this.currentIndex) / total) * 100;
+        var progressBar = document.getElementById('vocab-progress');
+        var total = this.shuffledOrder.length;
+        var percent = ((this.currentIndex) / total) * 100;
         progressBar.style.width = percent + '%';
     },
 
@@ -118,5 +143,6 @@ const vocabEngine = {
         this.score = 0;
         this.shuffledLetters = [];
         this.usedTiles = [];
+        this.shuffledOrder = [];
     }
 };
